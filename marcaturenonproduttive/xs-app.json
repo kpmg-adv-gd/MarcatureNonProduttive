@@ -1,0 +1,14 @@
+{
+  "welcomeFile": "/marcaturenonproduttive/index.html",
+  "authenticationMethod": "none",
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [
+    {
+      "source": "^/marcaturenonproduttive/(.*)$",
+      "target": "$1",
+      "localDir": "webapp"
+    }
+  ]
+}

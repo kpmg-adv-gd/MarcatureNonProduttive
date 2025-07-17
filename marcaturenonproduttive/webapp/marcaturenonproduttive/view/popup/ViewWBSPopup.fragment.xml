@@ -1,0 +1,68 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.plugin.marcaturenonproduttive.marcaturenonproduttive.controller.popup.ViewWBSPopup"
+    width="100%"
+    height="100%"
+>
+    <Dialog id="viewDefectDialog" title="WBS Details" showHeader="true" contentHeight="580px"  contentWidth="600px" verticalScrolling="false" horizontalScrolling="false"> 
+        <content>
+            <!-- Container principale -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="SpaceBetween">
+                <HBox width="90%" height="50%" renderType="Bare" justifyContent="SpaceBetween">
+                    <VBox width="100%" height="100%" renderType="Bare" justifyContent="SpaceBetween">
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="WBE" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="wbeID" width="50%" value="{/wbs/wbe}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="WBE Description" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="wbeDescriptionID" width="50%" value="{/wbs/wbe_description}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="WBS" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="wbsID" width="50%" value="{/wbs/wbs}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="WBS Description" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="wbsDescriptionID" width="50%" value="{/wbs/wbs_description}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="Confirmation Number" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="confirmationNumberID" width="50%" value="{/wbs/confirmation_number}" showValueHelp="false" class="markingMediumLabelValue" enabled="{= ${/mode} === 'create' }" />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="Activity" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="activityID" width="50%" value="{/wbs/activity_id}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="Activity Description" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="activityDescriptionID" width="50%" value="{/wbs/activity_id_description}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="User Group" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="userGroupID" width="50%" value="{/wbs/user_group}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="Network" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="networkID" width="50%" value="{/wbs/network}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" class="BoxInfoWBS">
+                            <Label text="Network Description" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input id="networkDescriptionID" width="50%" value="{/wbs/network_description}" showValueHelp="false" class="markingMediumLabelValue"  />
+                        </HBox>
+                    </VBox>
+                </HBox>
+                
+                <HBox width="90%" height="10%"  renderType="Bare" alignItems="Center" justifyContent="End">
+                    <Button text="Cancel" type="Emphasized" press="onClosePopup" class="sapUiSmallMarginEnd" />
+                    <Button text="Confirm" type="Emphasized" press="onConfirm" />
+                </HBox> 
+            </VBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

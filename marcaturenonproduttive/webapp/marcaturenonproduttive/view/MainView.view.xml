@@ -1,0 +1,207 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:t="sap.ui.table" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" 
+	xmlns:unified="sap.ui.unified" xmlns:core="sap.ui.core"
+ xmlns:html="http://www.w3.org/1999/xhtml" controllerName="kpmg.custom.plugin.marcaturenonproduttive.marcaturenonproduttive.controller.MainView" width="100%" height="100%">
+    <Panel 
+        id="panelPlugin"  
+        width="100%"
+        height="100%"
+        expandable="false"
+        expanded="false"
+        accessibleRole="Region"
+        backgroundDesign="Transparent"
+        class="sapUiNoContentPadding">  
+        <content>
+            <!-- Nuovo IconTabBar per le sezioni -->
+            <IconTabBar id="mainTabBar" class="sapUiResponsiveContentPadding" expanded="true" upperCase="false" select="changeTabSection">
+                <items>
+                    <IconTabFilter
+                        text="{i18n>markNP.section.marcatura}"
+                        key="marcatura"
+                        icon="sap-icon://quality-issue">
+                        <VBox width="100%" height="100%" renderType="Bare">
+                            <HBox width="100%" height="auto" renderType="Bare">
+                                <HBox width="13%" height="100%" renderType="Bare" class="filterBox" >
+                                    <Label text="{i18n>markNP.label.month}:" width="30%" textAlign="Left" vAlign="Middle" class="kpmgGDSmallLabel paddingLeft" />
+                                    <ComboBox id="monthSelect" placeholder="Enter Month" width="70%" items="{wbsModel>/months}"  class="GDInputField">
+                                        <core:ListItem key="{wbsModel>key}" text="{wbsModel>month}" />
+                                    </ComboBox>                                   
+                                </HBox>
+                                <HBox width="13%" height="100%" renderType="Bare" class="filterBox" >
+                                    <Label text="{i18n>markNP.label.year}:" width="30%" textAlign="Left" vAlign="Middle" class="kpmgGDSmallLabel paddingLeft" />
+                                    <ComboBox id="yearSelect" placeholder="Enter Year" width="70%"  items="{wbsModel>/years}"  class="GDInputField">
+                                        <core:ListItem key="{wbsModel>key}" text="{wbsModel>year}" />
+                                    </ComboBox>                                   
+                                </HBox>
+                                <VBox width="14.25%" height="100%" renderType="Bare" justifyContent="Center" alignItems="Center" >
+                                    <Button text="{i18n>markNP.button.search}" icon="sap-icon://search" type="Emphasized" class="searchButton" press="onGoPress" />
+                                </VBox>
+                            </HBox>
+                            <VBox width="100%" height="76%" renderType="Bare">
+                                <SinglePlanningCalendar
+                                    id="calendar"
+                                    appointmentSelect="onAppointmentSelect"
+                                    appointmentDrop="onAppointmentDrop"
+                                    appointmentResize="onAppointmentResize"
+                                    startDateChange="viewChange"
+                                    cellPress="selectedDatesChange"
+                                    >
+                                    
+                                    <views>
+                                        <SinglePlanningCalendarMonthView key="MonthView" title="Month" />
+                                    </views>
+                                    <appointments>
+                                        <unified:CalendarAppointment
+                                            title="{title}"
+                                            text="{text}"
+                                            startDate="{startDate}"
+                                            endDate="{endDate}"
+                                            type="{type}" />
+                                    </appointments>
+                                    
+                                </SinglePlanningCalendar>
+                            </VBox>
+                        </VBox>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        text="{i18n>markNP.section.WBS}"
+                        key="WBS" visible="{/visibleTabWBS}"
+                        icon="sap-icon://validate">
+                        <VBox width="100%" height="100%" renderType="Bare">
+                            <VBox width="100%" height="76%" renderType="Bare">
+                                <t:Table id="wbsTable" busy="{wbsModel>/BusyLoadingDefectTable}"  rowSelectionChange="rowSelectionChange"  class="kpmgGDTable" 
+                                    rows="{wbsModel>/wbs}" selectionMode="Multi" selectionBehavior="RowOnly" visibleRowCountMode="Auto" rowHeight="45px">
+                                <t:layoutData>
+                                    <FlexItemData growFactor="1" baseSize="0%"/>
+                                </t:layoutData>
+                                    <t:columns> 
+                                        <t:Column sortProperty="plant" filterProperty="plant" width="8.75%">
+                                            <Label text="{i18n>markNP.table.plant}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>plant}" visible="{= ${wbsModel>mode} === 'read' }" />
+                                                    <Input value="{wbsModel>plant}" visible="{= ${wbsModel>mode} !== 'read' }" enabled="false" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbe" filterProperty="wbe" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbe}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbe}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbe}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbe_description" filterProperty="wbe_description" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbe_description}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbs" filterProperty="wbs" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbs}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbs}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbs}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbs_description" filterProperty="wbs_description" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbs_description}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbs_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbs_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="network" filterProperty="network" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.network}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>network}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>network}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="network_description" filterProperty="network_description" width="8.75%">
+                                            <Label text="{i18n>markNP.table.network_description}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>network_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>network_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="activity_id" filterProperty="activity_id" width="8.75%">
+                                            <Label text="{i18n>markNP.table.activity}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>activity_id}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>activity_id}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="activity_id_description" filterProperty="activity_id_description" width="8.75%">
+                                            <Label text="{i18n>markNP.table.activity_description}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>activity_id_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>activity_id_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="confirmation_number" filterProperty="confirmation_number" width="8.75%">
+                                            <Label text="{i18n>markNP.table.confirmation_number}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>confirmation_number}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>confirmation_number}" visible="{= ${wbsModel>mode} !== 'read' }" enabled="{= ${wbsModel>mode} === 'create' }"/>
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="user_group" filterProperty="user_group" width="8.75%">
+                                            <Label text="{i18n>markNP.table.user_group}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>user_group}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>user_group}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column width="4%" hAlign="Center">
+                                            <Label text="{i18n>markNP.table.edit}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Center">
+                                                    <core:Icon width="50%" src="sap-icon://save" color="#d70a32" press="onPressSaveWBS" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                    <core:Icon width="50%" src="sap-icon://undo" color="#d70a32" press="onPressBackWBS" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                    <core:Icon src="sap-icon://edit" color="#d70a32" press="onPressEditWBS" visible="{= ${wbsModel>mode} === 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>                               
+                                    </t:columns>
+                                </t:Table>
+                            </VBox>
+                            <!-- Bottoni in basso a destra per confermare o cancellare QN -->
+                            <HBox width="33%" height="8%" class="buttonContainer" renderType="Bare">
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="confirmButton" text="{i18n>markNP.button.newWBS}" icon="sap-icon://add" type="Emphasized" class="confirmButton" press="onPressCreateWBS"/>
+                                </VBox>
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="copyButton" text="{i18n>markNP.button.copyWBS}" icon="sap-icon://copy" type="Reject" class="cancelButton" press="onPressCopyWBS"/>
+                                </VBox>
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="cancelButton" text="{i18n>markNP.button.cancelWBS}" icon="sap-icon://decline" type="Reject" class="cancelButton" press="onPressCancelWBS"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
+    </Panel>		
+</mvc:View>

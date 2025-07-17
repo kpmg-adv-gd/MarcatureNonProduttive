@@ -1,0 +1,15 @@
+{
+	"components": [
+		{
+			"id": "marcaturenonproduttive",
+			"type": "VIEW_PLUGIN",
+			"allowMultipleInstances": false,
+			"name": "kpmg.custom.plugin.marcaturenonproduttive.marcaturenonproduttive",
+			"propertyEditor": "kpmg.custom.plugin.marcaturenonproduttive.marcaturenonproduttive.builder.PropertyEditor",
+			"i18n": "kpmg.custom.plugin.marcaturenonproduttive.marcaturenonproduttive.i18n.i18n",
+            "productionProcessEnabled": true,
+           "productionProcessTitle": "marcaturenonproduttive",
+		   "supportedPodTypes": ["WORK_CENTER","OPERATION","ORDER","OTHER"]
+		}   
+	]
+}
