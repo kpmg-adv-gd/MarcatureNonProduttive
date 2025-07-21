@@ -54,13 +54,16 @@ sap.ui.define([
             var items = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
                 .filter(item => item.wbs == wbsSelected);
             that.MarkingPopupModel.setProperty("/wbsActivity", [...[{activity_id: "", activity_id_description: ""}], ...items]);
+            that.MarkingPopupModel.setProperty("/wbsActivitySelected", "");
+            that.MarkingPopupModel.setProperty("/wbsSelected", wbsSelected);
         },
 
         onChangeWBSActivity: function (oEvent) {
             var that = this;
             var wbsSelectedActivity = oEvent.getParameters().selectedItem.getProperty("key");
-            var confirmationNumber = that.wbsModel.getProperty("/wbs").filter(item => item.activity_id == wbsSelectedActivity)[0].confirmation_number;
-            var network = that.wbsModel.getProperty("/wbs").filter(item => item.activity_id == wbsSelectedActivity)[0].network;
+            var wbsSelected = that.MarkingPopupModel.getProperty("/wbsSelected")
+            var confirmationNumber = that.wbsModel.getProperty("/wbs").filter(item => item.wbs == wbsSelected && item.activity_id == wbsSelectedActivity)[0].confirmation_number;
+            var network = that.wbsModel.getProperty("/wbs").filter(item => item.wbs == wbsSelected && item.activity_id == wbsSelectedActivity)[0].network;
             that.MarkingPopupModel.setProperty("/confirmationNumber", confirmationNumber);
             that.MarkingPopupModel.setProperty("/network", network);
         },
@@ -291,11 +294,14 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             var plant = infoModel.getProperty("/plant");
+            let user = infoModel.getProperty("/user_id");
             
             var personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
             let network = that.MarkingPopupModel.getProperty("/network");
             var wbsActivity = that.MarkingPopupModel.getProperty("/wbsActivitySelected");
             var day = that.MarkingPopupModel.getProperty("/day");
+            var rowSelectedWBS = that.wbsModel.getProperty("/wbs").filter(item => item.network == network && item.activity_id == wbsActivity)[0];
+            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmationNumber");
 
             var hh = parseInt(that.getView().byId("hhInputId").getValue(),10);
             var mm = parseInt(that.getView().byId("mmInputId").getValue(),10);
@@ -304,29 +310,39 @@ sap.ui.define([
             var duration = Math.round( (hh + (mm/60)) * 100);
 
             let params = {
-                personnelNumber: personnelNumber,
+                plant: plant,
                 activityNumber: network,
                 activityNumberId: wbsActivity,
-                date: day,
-                duration: duration,
-                durationUom: "HCM",
-                unConfirmation: "X"
+                cancellation: "",
+                confirmation: "",
+                confirmationCounter: "",
+                confirmationNumber: confirmation_number,
+                date: that.formatDate(day),
+                duration: "" + duration,
+                durationUom: "HCN",
+                personalNumber: personnelNumber,
+                reasonForVariance: "",
+                unCancellation: "",
+                unConfirmation: "X",
+                rowSelectedWBS: rowSelectedWBS,
+                userId: user
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
-            let pathSendMarkingApi = "/api/sendMarkingToSapAndUpdateZTable";
+            let pathSendMarkingApi = "/api/sendZDMConfirmations";
             let url = BaseProxyURL + pathSendMarkingApi;
 
             // Callback di successo
             var successCallback = function (response) {
                 that.MainPODcontroller.showToast(that.MainPODcontroller.getI18n("marking.success.message"));
+                sap.ui.getCore().getEventBus().publish("WBS", "loadDateCalendar", null);
                 that.onClosePopup();
             };
 
             // Callback di errore
             var errorCallback = function (error) {
                 console.log("Chiamata POST fallita: ", error);
-                that.MainPODcontroller.showErrorMessageBox(that.MainPODcontroller.getI18n("marking.saveData.error.message"));
+                that.MainPODcontroller.showErrorMessageBox(error);
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,true,true);
         },

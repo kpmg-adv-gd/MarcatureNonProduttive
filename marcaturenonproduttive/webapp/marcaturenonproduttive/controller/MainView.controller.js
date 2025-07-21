@@ -18,10 +18,12 @@ sap.ui.define([
 			BaseController.prototype.onInit.apply(this, arguments);				           
             this.getView().setModel(this.wbsModel, "wbsModel");			           
             sap.ui.getCore().getEventBus().subscribe("WBS", "loadWBS", this.loadTableWBS, this);
+            sap.ui.getCore().getEventBus().subscribe("WBS", "loadDateCalendar", this.loadDateCalendar, this);
 		},
 
         onAfterRendering: function() {
            var that = this;
+           that.loadTableWBS();
            that.loadDateCalendar();
            that.wbsModel.setProperty("/calendarValue", []);
            that.wbsModel.setProperty("/wbs", []);
@@ -71,11 +73,40 @@ sap.ui.define([
                 if (response) {
                     that.wbsModel.setProperty("/myUserGroup", response);
                 }
-                that.wbsModel.setProperty("/visibleTabWBS", true);
+                that.loadAccessUserGroup();
             }
             // Callback di errore
             var errorCallback = function (error) {
                 console.log("Chiamata POST fallita: ", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+        },
+
+        loadAccessUserGroup: function () {
+            var that = this;
+           
+            let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/api/getAccessUserGroupWBS";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+            
+            let plant = that.getInfoModel().getProperty("/plant");
+            let userGroup = that.wbsModel.getProperty("/myUserGroup");
+
+            let params = {
+                plant: plant,
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response && response.includes(userGroup)) {
+                    that.wbsModel.setProperty("/visibleTabWBS", true);
+                }else{
+                    that.wbsModel.setProperty("/visibleTabWBS", false);
+                }
+            }
+            // Callback di errore
+            var errorCallback = function (error) {
+                that.wbsModel.setProperty("/visibleTabWBS", false);
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },

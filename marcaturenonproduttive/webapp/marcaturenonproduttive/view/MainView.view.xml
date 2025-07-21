@@ -64,11 +64,22 @@
                     </IconTabFilter>
                     <IconTabFilter
                         text="{i18n>markNP.section.WBS}"
-                        key="WBS" visible="{/visibleTabWBS}"
+                        key="WBS" visible="{wbsModel>/visibleTabWBS}"
                         icon="sap-icon://validate">
                         <VBox width="100%" height="100%" renderType="Bare">
-                            <VBox width="100%" height="76%" renderType="Bare">
-                                <t:Table id="wbsTable" busy="{wbsModel>/BusyLoadingDefectTable}"  rowSelectionChange="rowSelectionChange"  class="kpmgGDTable" 
+                            <HBox width="50%" height="auto" renderType="Bare">
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="confirmButton" text="{i18n>markNP.button.newWBS}" icon="sap-icon://add" type="Emphasized" class="confirmButton" press="onPressCreateWBS"/>
+                                </VBox>
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="copyButton" text="{i18n>markNP.button.copyWBS}" icon="sap-icon://copy" type="Reject" class="cancelButton" press="onPressCopyWBS"/>
+                                </VBox>
+                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
+                                    <Button id="cancelButton" text="{i18n>markNP.button.cancelWBS}" icon="sap-icon://decline" type="Reject" class="cancelButton" press="onPressCancelWBS"/>
+                                </VBox>
+                            </HBox>
+                            <VBox width="100%" height="100%" renderType="Bare">
+                                <t:Table id="wbsTable" busy="{wbsModel>/BusyLoadingDefectTable}"  rowSelectionChange="rowSelectionChange" class="kpmgGDTable" 
                                     rows="{wbsModel>/wbs}" selectionMode="Multi" selectionBehavior="RowOnly" visibleRowCountMode="Auto" rowHeight="45px">
                                 <t:layoutData>
                                     <FlexItemData growFactor="1" baseSize="0%"/>
@@ -80,24 +91,6 @@
                                                 <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
                                                     <Text wrapping="false" text="{wbsModel>plant}" visible="{= ${wbsModel>mode} === 'read' }" />
                                                     <Input value="{wbsModel>plant}" visible="{= ${wbsModel>mode} !== 'read' }" enabled="false" />
-                                                </HBox>
-                                            </t:template>
-                                        </t:Column>
-                                        <t:Column sortProperty="wbe" filterProperty="wbe" width="8.75%">
-                                            <Label wrapping="false" text="{i18n>markNP.table.wbe}"  />
-                                            <t:template>
-                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
-                                                    <Text wrapping="false" text="{wbsModel>wbe}" visible="{= ${wbsModel>mode} === 'read' }"  />
-                                                    <Input value="{wbsModel>wbe}" visible="{= ${wbsModel>mode} !== 'read' }" />
-                                                </HBox>
-                                            </t:template>
-                                        </t:Column>
-                                        <t:Column sortProperty="wbe_description" filterProperty="wbe_description" width="8.75%">
-                                            <Label wrapping="false" text="{i18n>markNP.table.wbe_description}"  />
-                                            <t:template>
-                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
-                                                    <Text wrapping="false" text="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
-                                                    <Input value="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
                                                 </HBox>
                                             </t:template>
                                         </t:Column>
@@ -116,6 +109,24 @@
                                                 <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
                                                     <Text wrapping="false" text="{wbsModel>wbs_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
                                                     <Input value="{wbsModel>wbs_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbe" filterProperty="wbe" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbe}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbe}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbe}" visible="{= ${wbsModel>mode} !== 'read' }" />
+                                                </HBox>
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column sortProperty="wbe_description" filterProperty="wbe_description" width="8.75%">
+                                            <Label wrapping="false" text="{i18n>markNP.table.wbe_description}"  />
+                                            <t:template>
+                                                <HBox renderType="Bare" alignItems="Center" justifyContent="Start">
+                                                    <Text wrapping="false" text="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} === 'read' }"  />
+                                                    <Input value="{wbsModel>wbe_description}" visible="{= ${wbsModel>mode} !== 'read' }" />
                                                 </HBox>
                                             </t:template>
                                         </t:Column>
@@ -186,18 +197,6 @@
                                     </t:columns>
                                 </t:Table>
                             </VBox>
-                            <!-- Bottoni in basso a destra per confermare o cancellare QN -->
-                            <HBox width="33%" height="8%" class="buttonContainer" renderType="Bare">
-                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
-                                    <Button id="confirmButton" text="{i18n>markNP.button.newWBS}" icon="sap-icon://add" type="Emphasized" class="confirmButton" press="onPressCreateWBS"/>
-                                </VBox>
-                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
-                                    <Button id="copyButton" text="{i18n>markNP.button.copyWBS}" icon="sap-icon://copy" type="Reject" class="cancelButton" press="onPressCopyWBS"/>
-                                </VBox>
-                                <VBox width="33%" height="100%" renderType="Bare" class="buttonBox">
-                                    <Button id="cancelButton" text="{i18n>markNP.button.cancelWBS}" icon="sap-icon://decline" type="Reject" class="cancelButton" press="onPressCancelWBS"/>
-                                </VBox>
-                            </HBox>
                         </VBox>
                     </IconTabFilter>
                 </items>
