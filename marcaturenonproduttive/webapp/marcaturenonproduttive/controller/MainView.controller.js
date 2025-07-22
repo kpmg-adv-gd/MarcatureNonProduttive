@@ -29,25 +29,27 @@ sap.ui.define([
            that.wbsModel.setProperty("/wbs", []);
            that.wbsModel.setProperty("/visibleTabWBS", false);
            that.wbsModel.setProperty("/months", [
-            { key: "0", month: "Gennaio" },
-            { key: "1", month: "Febbraio" },
-            { key: "2", month: "Marzo" },
-            { key: "3", month: "Aprile" },
-            { key: "4", month: "Maggio" },
-            { key: "5", month: "Giugno" },
-            { key: "6", month: "Luglio" },
-            { key: "7", month: "Agosto" },
-            { key: "8", month: "Settembre" },
-            { key: "9", month: "Ottobre" },
-            { key: "10", month: "Novembre" },
-            { key: "11", month: "Dicembre" }
+            { "key": "0", "month": "January" },
+            { "key": "1", "month": "February" },
+            { "key": "2", "month": "March" },
+            { "key": "3", "month": "April" },
+            { "key": "4", "month": "May" },
+            { "key": "5", "month": "June" },
+            { "key": "6", "month": "July" },
+            { "key": "7", "month": "August" },
+            { "key": "8", "month": "September" },
+            { "key": "9", "month": "October" },
+            { "key": "10", "month": "November" },
+            { "key": "11", "month": "December" }
            ]);
            that.wbsModel.setProperty("/years", [
-            { key: "2025", year: "2025" },
-            { key: "2024", year: "2024" },
-            { key: "2023", year: "2023" },
-            { key: "2022", year: "2022" },
-            { key: "2021", year: "2021" },
+            { key:  ""+(new Date().getFullYear()+3) , year: ""+(new Date().getFullYear()+3)},
+            { key:  ""+(new Date().getFullYear()+2) , year: ""+(new Date().getFullYear()+2)},
+            { key:  ""+(new Date().getFullYear()+1) , year: ""+(new Date().getFullYear()+1)},
+            { key:  ""+new Date().getFullYear() , year: ""+new Date().getFullYear()},
+            { key:  ""+(new Date().getFullYear()-1) , year: ""+(new Date().getFullYear()-1)},
+            { key:  ""+(new Date().getFullYear()-2) , year: ""+(new Date().getFullYear()-2)},
+            { key:  ""+(new Date().getFullYear()-3) , year: ""+(new Date().getFullYear()-3)},
            ]);
 
            that.loadMyUserGroup();
@@ -518,7 +520,7 @@ sap.ui.define([
                     const data = new Date(anno, mese - 1, giorno);
 
                     item.DAY = data;
-                    item.VALUE = (parseInt(item.VALUE)/100).toFixed(2);
+                    item.VALUE = that.formatHCN(item.VALUE);
                 });
                 that.wbsModel.setProperty("/calendarValue", response);
                 that._decorateCells();
@@ -529,6 +531,12 @@ sap.ui.define([
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
+
+        formatHCN: function(centesimi) {
+            const ore = Math.floor(centesimi / 100);
+            const minuti = Math.round((centesimi % 100) * 0.6); // 1 centesimo = 0.6 minuti
+            return ore + "h " + minuti.toString().padStart(2, '0') + "m";
+        }
 
 	});
 });
