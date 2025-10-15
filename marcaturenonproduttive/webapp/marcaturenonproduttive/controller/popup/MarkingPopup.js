@@ -59,7 +59,16 @@ sap.ui.define([
                     items.push({
                         wbe: data.wbe,
                         wbe_description: data.wbe_description,
-                        user_group: data.user_group
+                        user_group: data.user_group,
+                        activities: [{
+                            activity_id: data.activity_id,
+                            activity_id_description: data.activity_id_description
+                        }]
+                    })
+                }else{
+                    items.filter(item => item.wbe == data.wbe)[0].activities.push({
+                        activity_id: data.activity_id,
+                        activity_id_description: data.activity_id_description
                     })
                 }
             })
@@ -76,7 +85,7 @@ sap.ui.define([
             var that = this;
             var wbeSelected = oEvent.getParameters().selectedItem.getProperty("key");
             var datas = that.MarkingPopupModel.getProperty("/wbe").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
-                .filter(item => item.wbe == wbeSelected);
+                .filter(item => item.wbe == wbeSelected)[0].activities;
             var items = [];
             datas.forEach(data => {
                 if (items.filter(item => item.activity_id == data.activity_id).length == 0) {
