@@ -51,8 +51,18 @@ sap.ui.define([
         onchangeWBS: function (oEvent) {
             var that = this;
             var wbsSelected = oEvent.getParameters().selectedItem.getProperty("key");
-            var items = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
+            var datas = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
                 .filter(item => item.wbs == wbsSelected);
+            var items = [];
+            datas.forEach(data => {
+                if (items.filter(item => item.wbe == data.wbe).length == 0) {
+                    items.push({
+                        wbe: data.wbe,
+                        wbe_description: data.wbe_description,
+                        user_group: data.user_group
+                    })
+                }
+            })
             that.MarkingPopupModel.setProperty("/wbe", [...[{wbe: "", wbe_description: "", user_group: ""}], ...items]);
             that.MarkingPopupModel.setProperty("/wbsSelected", wbsSelected);
             // reset
@@ -65,8 +75,17 @@ sap.ui.define([
         onchangeWBE: function (oEvent) {
             var that = this;
             var wbeSelected = oEvent.getParameters().selectedItem.getProperty("key");
-            var items = that.MarkingPopupModel.getProperty("/wbe").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
+            var datas = that.MarkingPopupModel.getProperty("/wbe").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
                 .filter(item => item.wbe == wbeSelected);
+            var items = [];
+            datas.forEach(data => {
+                if (items.filter(item => item.activity_id == data.activity_id).length == 0) {
+                    items.push({
+                        activity_id: data.activity_id,
+                        activity_id_description: data.activity_id_description,
+                    })
+                }
+            })
             that.MarkingPopupModel.setProperty("/wbsActivity", [...[{activity_id: "", activity_id_description: ""}], ...items]);
             that.MarkingPopupModel.setProperty("/wbeSelected", wbeSelected);
             // reset
