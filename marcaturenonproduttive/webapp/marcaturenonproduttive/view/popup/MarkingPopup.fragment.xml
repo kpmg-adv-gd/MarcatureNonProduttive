@@ -39,6 +39,16 @@
                     </HBox>
                 </HBox>
 
+                <!-- WBE -->
+                <HBox width="90%" height="18%" renderType="Bare" justifyContent="Center" alignItems="Center">
+                    <HBox renderType="Bare" alignItems="Center" justifyContent="Center" width="100%" height="100%">
+                        <Label text="WBE" class="markingMediumLabel markingMediumLabelWidth9Rem" width="35%" />
+                        <Select id="wbeSelectID" selectedKey="{/wbeSelected}" width="65%" items="{/wbe}" change="onchangeWBE">
+                            <core:Item key="{wbe}" text="{wbe_description}" />
+                        </Select>
+                    </HBox>
+                </HBox>
+
                 <!-- WBS Activity -->
                 <HBox width="90%" height="18%" renderType="Bare" justifyContent="Center" alignItems="Center">
                     <HBox renderType="Bare" alignItems="Center" justifyContent="Center" width="100%" height="100%">

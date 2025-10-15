@@ -53,9 +53,26 @@ sap.ui.define([
             var wbsSelected = oEvent.getParameters().selectedItem.getProperty("key");
             var items = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
                 .filter(item => item.wbs == wbsSelected);
-            that.MarkingPopupModel.setProperty("/wbsActivity", [...[{activity_id: "", activity_id_description: ""}], ...items]);
-            that.MarkingPopupModel.setProperty("/wbsActivitySelected", "");
+            that.MarkingPopupModel.setProperty("/wbe", [...[{wbe: "", wbe_description: "", user_group: ""}], ...items]);
             that.MarkingPopupModel.setProperty("/wbsSelected", wbsSelected);
+            // reset
+            that.MarkingPopupModel.setProperty("/wbeSelected", "");
+            that.MarkingPopupModel.setProperty("/wbsActivitySelected", "");
+            that.MarkingPopupModel.setProperty("/confirmationNumber", "");
+            that.MarkingPopupModel.setProperty("/network", "");
+        },
+
+        onchangeWBE: function (oEvent) {
+            var that = this;
+            var wbeSelected = oEvent.getParameters().selectedItem.getProperty("key");
+            var items = that.MarkingPopupModel.getProperty("/wbe").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
+                .filter(item => item.wbe == wbeSelected);
+            that.MarkingPopupModel.setProperty("/wbsActivity", [...[{activity_id: "", activity_id_description: ""}], ...items]);
+            that.MarkingPopupModel.setProperty("/wbeSelected", wbeSelected);
+            // reset
+            that.MarkingPopupModel.setProperty("/wbsActivitySelected", "");
+            that.MarkingPopupModel.setProperty("/confirmationNumber", "");
+            that.MarkingPopupModel.setProperty("/network", "");
         },
 
         onChangeWBSActivity: function (oEvent) {
