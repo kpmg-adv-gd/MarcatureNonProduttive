@@ -65,8 +65,6 @@ sap.ui.define([
                 return;
             }
             var datas = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
-            var wbsSelected = oEvent.getParameters().selectedItem.getProperty("key");
-            var datas = that.wbsModel.getProperty("/wbs").filter(item => item.user_group.includes(that.wbsModel.getProperty("/myUserGroup")))
                 .filter(item => item.wbs == wbsSelected);
             var items = [];
             datas.forEach(data => {
