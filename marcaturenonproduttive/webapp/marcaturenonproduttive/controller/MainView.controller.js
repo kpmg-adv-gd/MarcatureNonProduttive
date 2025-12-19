@@ -236,7 +236,7 @@ sap.ui.define([
 
             // Callback di successo
             var successCallback = function (response) {
-                if (pathWBS && confirmationNumber) {
+                if (pathWBS && confirmationNumber && pathWBS != "WBS") {
                     that.wbsModel.setProperty(pathWBS, response.filter(item => item.confirmation_number == confirmationNumber)[0]);
                     that.wbsModel.setProperty(pathWBS + "/mode", "read");
                 }else{
