@@ -741,7 +741,7 @@ sap.ui.define([
 
             let params={
                 plant:plant,
-                wbe: that.MarkingPopupModel.getProperty("/wbeSelected").substring(0, 16)
+                wbe: that.MarkingPopupModel.getProperty("/wbeSelected")
             };
 
             // Callback di successo
